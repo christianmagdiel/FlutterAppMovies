@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/material.dart' as prefix0;
 import 'package:movies/src/models/pelicula_model.dart';
 
 class MovieHorizontal extends StatelessWidget {
@@ -25,7 +24,7 @@ class MovieHorizontal extends StatelessWidget {
     });
     
     return Container(
-     height: _screenSize.height * 0.25,
+     height: _screenSize.height * 0.35,
      child: PageView.builder(
        pageSnapping: false,
        controller: _pageController,
@@ -37,17 +36,21 @@ class MovieHorizontal extends StatelessWidget {
   }
 
  Widget _crearTarjeta(BuildContext context, Pelicula pelicula){
-   return Container(
+     pelicula.uniqueId = '${pelicula.id}-poster';
+   final tarjeta = Container(
        margin: EdgeInsets.only(right: 15.0),
        child: Column(
          children: <Widget>[
-           ClipRRect(
-             borderRadius: BorderRadius.circular(20.0),
+           Hero(
+              tag: pelicula.uniqueId,
+              child: ClipRRect(
+              borderRadius: BorderRadius.circular(20.0),
               child: FadeInImage(
-               image: NetworkImage(pelicula.getPosterImg()),
-               placeholder: AssetImage('assets/img/no-image.jpg'),
-               fit: BoxFit.cover,
-               height: 160.0,
+              image: NetworkImage(pelicula.getPosterImg()),
+              placeholder: AssetImage('assets/img/no-image.jpg'),
+              fit: BoxFit.cover,
+              height: 160.0,
+              ),
              ),
            ),
            SizedBox(height: 5.0),
@@ -58,6 +61,13 @@ class MovieHorizontal extends StatelessWidget {
            ),
          ],   
       ),
+     );
+
+     return GestureDetector(
+       child: tarjeta,
+       onTap: () {
+        Navigator.pushNamed(context, 'detalle', arguments: pelicula);
+       },
      );
  }
 
